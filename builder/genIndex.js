@@ -16,15 +16,10 @@ const genIndex = function (markup) {
     }</style>`;
   }
 
+  // All values are hardcoded in template.html - no replacements needed
   html = html
     .replace("{{^READ_TIME}}", readVar)
-    .replace("{{^SCROLL_MSG}}", markup)
-    .replace(
-      "{{^HBD_MSG}}",
-      process.env.HBD_MSG || "Wish you a very Happy Birthday"
-    )
-    .replace("{{^NAME}}", process.env.NAME)
-    .replace("{{^NICKNAME}}", process.env.NICKNAME || process.env.NAME);
+    .replace("{{^SCROLL_MSG}}", markup || "");
 
   fs.writeFileSync(path.join(__dirname, "../src/index.html"), html, {
     encoding: "utf-8",

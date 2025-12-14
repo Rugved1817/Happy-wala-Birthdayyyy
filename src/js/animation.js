@@ -167,7 +167,9 @@ export const animate = function () {
       music.loop = true;
       music.play();
 
-      if (!process.env.SCROLL_MSG) {
+      // Scroll message is hardcoded in template - always show frame 0 first
+      const hasScrollMsg = document.querySelector(".scroll .text").textContent.trim().length > 0;
+      if (!hasScrollMsg) {
         frames[0].style.display = "flex";
         setTimeout(() => {
           frames[0].classList.add("appear");

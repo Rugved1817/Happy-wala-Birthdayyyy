@@ -1,11 +1,11 @@
 export default {
-  name: process.env.NAME, // actual name of the recipient (Mandatory)
+  name: "Jiya", // actual name of the recipient (hardcoded)
 
-  nickname: process.env.NICKNAME, // nickname(optional)
+  nickname: "Ritwika", // nickname (hardcoded)
 
-  pic: process.env.PIC, // image url of recipients (Mandatory)
+  pic: "https://raw.githubusercontent.com/Rugved1817/Happy-wala-Birthdayyyy/main/src/pic.jpeg", // image url (hardcoded)
 
-  showScrollMsg: process.env.SCROLL_MSG, // set to false if you do not want the scrolling message
+  showScrollMsg: "https://telegra.ph/Birthday-12-14-6", // scroll message URL (hardcoded)
 
-  birthDate: process.env.BIRTH_DATE, // Mention birthday date in YYYY-MM-DD format
+  birthDate: null, // Mention birthday date in YYYY-MM-DD format (optional)
 };
