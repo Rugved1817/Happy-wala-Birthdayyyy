@@ -3,7 +3,7 @@ export default {
 
   nickname: "Ritwika", // nickname (hardcoded)
 
-  pic: "https://raw.githubusercontent.com/Rugved1817/Happy-wala-Birthdayyyy/main/src/pic.jpeg", // image url (hardcoded)
+  pic: "../resources/img/WhatsApp Image 2025-08-16 at 00.09.18.jpeg", // image url (hardcoded)
 
   showScrollMsg: "https://telegra.ph/Birthday-12-14-6", // scroll message URL (hardcoded)
 

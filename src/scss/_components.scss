@@ -97,7 +97,7 @@
   border-style: dotted;
   border-radius: 50%;
 
-  background-image: url(https://raw.githubusercontent.com/Rugved1817/Happy-wala-Birthdayyyy/main/src/pic.jpeg);
+  background-image: url("../resources/img/WhatsApp Image 2025-08-16 at 00.09.18.jpeg");
   background-position: 50% 10%;
   background-repeat: no-repeat;
   background-size: 120% auto;
@@ -126,10 +126,13 @@
 .HBD-text {
   width: 90%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .HBD {
-  font-size: 2.4rem;
+  font-size: 1.6rem;
   padding: 0;
   color: #fff;
   text-shadow: 
@@ -137,13 +140,17 @@
     0 0 20px rgba(255, 105, 180, 0.6),
     0 2px 4px rgba(0, 0, 0, 0.3);
   line-height: 1.4;
+  text-align: left;
+  direction: ltr;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 
   @media (max-width: 800px) {
-    font-size: 3.4rem;
+    font-size: 1.4rem;
   }
 
   @media (max-width: 500px) {
-    font-size: 3rem;
+    font-size: 1.2rem;
   }
 }
 

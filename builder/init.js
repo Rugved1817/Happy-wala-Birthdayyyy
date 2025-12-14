@@ -1,7 +1,6 @@
 const axios = require("axios").default;
 const path = require("path");
 const fs = require("fs");
-const setPic = require("./getPic");
 const genIndex = require("./genIndex");
 const {
   generateMarkupLocal,
@@ -20,9 +19,8 @@ console.log("================================");
 //Local initialization
 const setLocalData = async () => {
   try {
-    // For local builds, use PIC from env var or default to local file
-    const picFileName = process.env.PIC || "sample-pic.jpeg";
-    const pic = path.join(__dirname, "../local/", picFileName);
+    // Photo is hardcoded in CSS - no processing needed
+    console.log("Photo is hardcoded in CSS - skipping image processing");
     
     // Local builds can use local scroll message file if needed
     let markup = "";
@@ -37,7 +35,6 @@ const setLocalData = async () => {
         console.log("No local scroll message file found - continuing without it");
       }
     }
-    await setPic(pic);
     genIndex(markup);
   } catch (e) {
     throw new Error(e.message);
@@ -49,15 +46,7 @@ const setRemoteData = async () => {
   try {
     console.log("\n=== Starting Remote Initialization ===");
     console.log("All values are hardcoded - no environment variables needed");
-    
-    // Photo is hardcoded in CSS, so we don't need to fetch/process it
-    // Create a placeholder pic.jpeg file to avoid build errors (if needed)
-    const picPath = path.join(__dirname, "../src/pic.jpeg");
-    if (!fs.existsSync(picPath)) {
-      console.log("Creating placeholder pic.jpeg (photo is loaded from CSS)");
-      // Create a minimal placeholder if file doesn't exist
-      fs.writeFileSync(picPath, "");
-    }
+    console.log("Photo is hardcoded in CSS - no image processing needed");
     
     console.log("Generating index.html...");
     genIndex(""); // Empty markup - scroll message is hardcoded in template

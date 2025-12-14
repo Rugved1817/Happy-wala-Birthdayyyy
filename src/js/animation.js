@@ -47,10 +47,13 @@ const readMsg = (text) => {
   }
 };
 
-// Streaming text animation - types out text character by character
+// Streaming text animation - types out text character by character from left to right
 const streamText = (element, text, speed = 50) => {
   if (!element || !text) return;
   
+  // Ensure left-to-right direction
+  element.style.textAlign = "left";
+  element.style.direction = "ltr";
   element.textContent = ""; // Clear the element
   element.style.opacity = "1"; // Make sure it's visible
   
@@ -66,7 +69,7 @@ const streamText = (element, text, speed = 50) => {
       // Remove cursor, add character, then add cursor back
       cursor.remove();
       const char = text[index];
-      element.textContent += char;
+      element.textContent += char; // This naturally flows left to right
       element.appendChild(cursor);
       index++;
       
