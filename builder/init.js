@@ -57,7 +57,33 @@ const setLocalData = async () => {
 const setRemoteData = async () => {
   try {
     console.log("\n=== Starting Remote Initialization ===");
+    
+    // Validate PIC URL before attempting fetch
+    if (!picPath || typeof picPath !== 'string') {
+      throw new Error("PIC environment variable is not set or invalid");
+    }
+    
+    // Check if URL is localhost/local - this won't work on Netlify
+    const lowerPath = picPath.toLowerCase();
+    if (lowerPath.includes('localhost') || 
+        lowerPath.includes('127.0.0.1') || 
+        lowerPath.includes('::1') ||
+        lowerPath.startsWith('file://') ||
+        !lowerPath.startsWith('http://') && !lowerPath.startsWith('https://')) {
+      console.error("\n❌ ERROR: Invalid PIC URL detected!");
+      console.error("PIC value:", picPath);
+      console.error("\nThe PIC URL must be a publicly accessible HTTP/HTTPS URL.");
+      console.error("Localhost, file://, or relative paths will NOT work on Netlify.");
+      console.error("\nTo fix this:");
+      console.error("1. Upload your image to https://telegra.ph");
+      console.error("2. Right-click the uploaded image → Copy image address");
+      console.error("3. Use that URL (should start with https://telegra.ph/file/...)");
+      console.error("4. Set it as the PIC environment variable in Netlify dashboard");
+      throw new Error(`PIC URL is not publicly accessible. It appears to be a local path: ${picPath}. Please use a public URL (e.g., from telegra.ph).`);
+    }
+    
     console.log("Fetching image from:", picPath);
+    console.log("URL validation: ✓ (publicly accessible)");
     
     let res;
     try {
@@ -69,7 +95,7 @@ const setRemoteData = async () => {
         }
       });
     } catch (axiosError) {
-      console.error("Failed to fetch image from URL:", picPath);
+      console.error("\n❌ Failed to fetch image from URL:", picPath);
       console.error("Error details:", {
         message: axiosError.message,
         code: axiosError.code,
@@ -78,7 +104,11 @@ const setRemoteData = async () => {
           statusText: axiosError.response.statusText
         } : "No response"
       });
-      throw new Error(`Failed to fetch image: ${axiosError.message}. Please verify the PIC URL is correct and accessible.`);
+      console.error("\nTroubleshooting:");
+      console.error("1. Verify the URL is correct and accessible (try opening it in a browser)");
+      console.error("2. Make sure the URL uses HTTPS (not HTTP)");
+      console.error("3. Ensure the image is publicly accessible (not behind authentication)");
+      throw new Error(`Failed to fetch image: ${axiosError.message}. Please verify the PIC URL is correct and publicly accessible.`);
     }
     
     const pic = res.data;
