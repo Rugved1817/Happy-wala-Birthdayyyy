@@ -19,7 +19,8 @@ const blackText = document.querySelectorAll(".bb-text"), // msgs in the dark roo
 
 const frames = document.querySelectorAll(".frame"),
   msgWindow = document.querySelector(".scroll"), // this one has the message frame in [0] and card fram in [1]
-  msg = document.querySelector(".text"); // the Message para
+  msg = document.querySelector(".text"), // the Message para
+  hbdMsg = document.querySelector(".HBD"); // the HBD message
 
 //Sfx files
 
@@ -35,15 +36,50 @@ const readMsg = (text) => {
   for (let i = 0; i < text.length; i++) {
     // this loop goes through all the text msg paras
     setTimeout(() => {
-      // A timeout of 5s ia applied to all text elements so that appear successively one after the other
+      // Speed up: reduced from 5s to 2s
       text[i].classList.add("read"); // this adds a fadeIn-fadeOut animation to elements
       if (i === text.length - 1) {
         // this ensures that the button appears only after the last text is displayed.
         button.style.display = "inline-block";
         CTAtext.style.display = "block";
       }
-    }, 5000 * i);
+    }, 3500 * i); // Slower: 2000 -> 3500
   }
+};
+
+// Streaming text animation - types out text character by character
+const streamText = (element, text, speed = 50) => {
+  if (!element || !text) return;
+  
+  element.textContent = ""; // Clear the element
+  element.style.opacity = "1"; // Make sure it's visible
+  
+  // Add blinking cursor
+  const cursor = document.createElement("span");
+  cursor.className = "typing-cursor";
+  cursor.textContent = "|";
+  element.appendChild(cursor);
+  
+  let index = 0;
+  const typeChar = () => {
+    if (index < text.length) {
+      // Remove cursor, add character, then add cursor back
+      cursor.remove();
+      const char = text[index];
+      element.textContent += char;
+      element.appendChild(cursor);
+      index++;
+      
+      // Vary speed slightly for more natural feel
+      const delay = char === " " ? speed * 0.3 : speed;
+      setTimeout(typeChar, delay);
+    } else {
+      // Remove cursor when done
+      cursor.remove();
+    }
+  };
+  
+  typeChar();
 };
 
 // transition() is animation for change from one scene to another. It takes the current scene div element as input.
@@ -84,7 +120,7 @@ export const animate = function () {
         button.classList.remove("switch");
         darkroom.style.display = "none";
         readMsg(roomText);
-      }, 4000);
+      }, 3500); // Slower: 2000 -> 3500
     } else if (button.classList.contains("door-out")) {
       /* 
               when the door is pressed, scene changes to cemetry. Again, the msg will be displayed, after 
@@ -100,7 +136,7 @@ export const animate = function () {
         button.classList.remove("door-out");
         room.style.display = "none";
         readMsg(hallText);
-      }, 4000);
+      }, 3500); // Slower: 2000 -> 3500
     } else if (button.classList.contains("door-in")) {
       /* 
               when the door is pressed, scene changes to the gift room. Again, the msg will be displayed, after 
@@ -115,7 +151,7 @@ export const animate = function () {
         button.classList.remove("door-in");
         hallway.style.display = "none";
         readMsg(giftText);
-      }, 4000);
+      }, 3500); // Slower: 2000 -> 3500
     } else if (button.classList.contains("gift")) {
       /* 
               when the gift is pressed, the gift scene vanishes and the white div fades slowly giving a sense 
@@ -136,17 +172,29 @@ export const animate = function () {
         setTimeout(() => {
           frames[0].classList.add("appear");
           frames[0].style.opacity = "1";
-        }, 1500);
+          // Show photo gallery when card appears
+          const photoGallery = document.querySelector(".photo-gallery");
+          if (photoGallery) {
+            photoGallery.classList.add("show-photos");
+            photoGallery.style.opacity = "1";
+          }
+          // Stream the HBD message
+          if (hbdMsg && hbdMsg.textContent) {
+            const originalText = hbdMsg.textContent;
+            streamText(hbdMsg, originalText, 50); // Slower: 30 -> 50
+          }
+        }, 1200); // Slower: 800 -> 1200
         return;
       }
 
       //This value is stored in the --readTime css variable of root element and is calculated dynamically at build time.
+      // Speed up scroll message by reducing the time
       const readTime =
-        parseInt(
+        (parseInt(
           getComputedStyle(document.documentElement).getPropertyValue(
             "--readTime"
           )
-        ) + 5;
+        ) + 5) * 0.8; // Slower: multiply by 0.8 (was 0.6 for faster)
 
       frames[1].style.display = "flex";
 
@@ -154,12 +202,12 @@ export const animate = function () {
         frames[1].classList.add("appear");
         frames[1].style.opacity = "1";
         msg.classList.add("move-up");
-      }, 1500);
+      }, 800); // Speed up: 1500 -> 800
 
       setTimeout(() => {
         msg.style.transform = "translateY(-100%)";
         flash.style.display = "none";
-      }, 5000);
+      }, 4500); // Slower: 3000 -> 4500
 
       setTimeout(() => {
         msgWindow.classList.add("fade-in");
@@ -171,6 +219,17 @@ export const animate = function () {
         frames[0].style.display = "flex";
         frames[0].classList.add("appear");
         frames[0].style.opacity = "1";
+        // Show photo gallery when card appears
+        const photoGallery = document.querySelector(".photo-gallery");
+        if (photoGallery) {
+          photoGallery.classList.add("show-photos");
+          photoGallery.style.opacity = "1";
+        }
+        // Stream the HBD message when card appears
+        if (hbdMsg && hbdMsg.textContent) {
+          const originalText = hbdMsg.textContent;
+          streamText(hbdMsg, originalText, 30); // Speed up: 40 -> 30
+        }
       }, (readTime + 3) * 1000);
     }
   });

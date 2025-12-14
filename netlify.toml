@@ -6,3 +6,5 @@
 [template.environment]
   NAME = "enter Name of the receiver"
   PIC = "enter web url of the receiver's image"
+  SCROLL_MSG = "enter web url of scroll message (telegra.ph article)"
+  HBD_MSG = "enter custom birthday message (optional)"

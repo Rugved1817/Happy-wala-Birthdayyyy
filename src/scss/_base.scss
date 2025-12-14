@@ -19,4 +19,21 @@ body {
   color: #fff;
   font-family: "Courgette", cursive;
   // background-color: black;
+  cursor: none !important; // Hide default cursor
+}
+
+*,
+*::before,
+*::after {
+  cursor: none !important; // Hide cursor on all elements
+}
+
+// Keep pointer cursor for interactive elements (but still hidden)
+a,
+button,
+.btn,
+input,
+textarea,
+select {
+  cursor: none !important;
 }
